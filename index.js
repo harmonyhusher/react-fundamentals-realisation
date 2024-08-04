@@ -20,22 +20,30 @@ class Element {
     return attributesString;
   }
 
-  render() {
-    const attributes = this._mapAttributes();
-    const tag = this.tagName;
-
+  _appendChilds() {
     const renderedChildren = this.children
       .map((child) => (child instanceof Element ? child.render() : child))
       .join("");
 
+    return renderedChildren;
+  }
+
+  get tag() {
+    return this.tagName;
+  }
+
+  render() {
+    const attributes = this._mapAttributes();
+    const children = this._appendChilds();
+
     const selfClosingTags = ["img", "input", "br", "hr", "meta", "link"];
-    if (selfClosingTags.includes(tag)) {
-      return `<${tag} ${attributes ? attributes : ""} />`;
+    if (selfClosingTags.includes(this.tag)) {
+      return `<${this.tag} ${attributes ? attributes : ""} />`;
     }
 
-    return `<${tag} ${
-      attributes ? attributes : ""
-    }>${renderedChildren}</${tag}>`;
+    return `<${this.tag} ${attributes ? attributes : ""}>${children}</${
+      this.tag
+    }>`;
   }
 }
 
